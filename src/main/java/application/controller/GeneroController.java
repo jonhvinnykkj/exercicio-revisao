@@ -2,6 +2,8 @@ package application.controller;
 
 import application.model.Genero;
 import application.repository.GeneroRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,46 +14,41 @@ public class GeneroController {
 
     private final GeneroRepository generoRepository;
 
+    @Autowired
     public GeneroController(GeneroRepository generoRepository) {
         this.generoRepository = generoRepository;
     }
 
-    // Lista todos os gêneros
-    @GetMapping
+    @RequestMapping(method = RequestMethod.GET)
     public String listar(Model model) {
         model.addAttribute("generos", generoRepository.findAll());
-        return "generos/listar"; // caminho: /WEB-INF/generos/listar.jsp
+        return "generos/listar";
     }
 
-    // Abre o formulário para novo gênero
-    @GetMapping("/novo")
+    @RequestMapping(value = "/novo", method = RequestMethod.GET)
     public String novo(Model model) {
         model.addAttribute("genero", new Genero());
-        return "generos/form"; // caminho: /WEB-INF/generos/form.jsp
+        return "generos/form";
     }
 
-    // Salva ou atualiza um gênero
-    @PostMapping
+    @RequestMapping(method = RequestMethod.POST)
     public String salvar(@ModelAttribute Genero genero) {
         generoRepository.save(genero);
         return "redirect:/generos";
     }
 
-    // Abre o formulário para editar um gênero existente
-    @GetMapping("/editar/{id}")
+    @RequestMapping(value = "/editar/{id}", method = RequestMethod.GET)
     public String editar(@PathVariable Long id, Model model) {
         Genero genero = generoRepository.findById(id).orElse(new Genero());
         model.addAttribute("genero", genero);
         return "generos/form";
     }
 
-    // Exclui um gênero por ID, se existir
-    @GetMapping("/deletar/{id}")
+    @RequestMapping(value = "/deletar/{id}", method = RequestMethod.GET)
     public String deletar(@PathVariable Long id) {
         if (generoRepository.existsById(id)) {
             generoRepository.deleteById(id);
         }
         return "redirect:/generos";
     }
-    
 }
