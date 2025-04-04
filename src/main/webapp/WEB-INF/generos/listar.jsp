@@ -83,7 +83,7 @@
             <td>${genero.nome}</td>
             <td class="action-links">
                 <a href="/generos/editar/${genero.id}">Editar</a> |
-                <a href="/generos/excluir/${genero.id}">Excluir</a>
+                <a href="${pageContext.request.contextPath}/generos/deletar/${genero.id}">Excluir</a>
             </td>
         </tr>
     </c:forEach>
